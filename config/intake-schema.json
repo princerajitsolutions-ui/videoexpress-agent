@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "VideoExpress Agent Intake Configuration Schema",
-  "description": "Structured intake parameters collected at the start of a new VideoExpress production run before spending credits or generating assets.",
+  "description": "Structured intake parameters collected when 'Create a VideoExpress Video' or 'Use VideoExpress Agent' is invoked. Aspect Ratio (16:9 vs 9:16) determines whether the video is a Standard Widescreen Video or a Vertical Short/Reel.",
   "type": "object",
   "required": [
     "video_type",
@@ -16,14 +16,14 @@
     "video_type": {
       "type": "string",
       "enum": [
-        "narrated_story",
-        "youtube_short_reel",
+        "narrated_story_fable",
         "explainer_documentary",
-        "comedy_satire_skit",
-        "fable_storybook"
+        "comedy_satire",
+        "adventure_action",
+        "educational_lesson"
       ],
-      "default": "narrated_story",
-      "description": "Primary narrative format and pacing profile for the video."
+      "default": "narrated_story_fable",
+      "description": "Narrative genre and storytelling structure of the video."
     },
     "visual_style": {
       "type": "string",
@@ -35,7 +35,7 @@
         "claymation"
       ],
       "default": "2d_stickman",
-      "description": "Locked visual style applied across Master Character, Location References, Image Prompts, and VideoExpress select-type dropdown."
+      "description": "Locked visual style applied across Master Character (Reference Photo 1), Location References (Reference Photo 2), Image Prompts, and VideoExpress select-type dropdown."
     },
     "aspect_ratio": {
       "type": "string",
@@ -44,7 +44,7 @@
         "9:16"
       ],
       "default": "16:9",
-      "description": "Project-wide aspect ratio invariant (Landscape 16:9 or Vertical 9:16 only; 1:1 is never used)."
+      "description": "Project-wide aspect ratio invariant. 16:9 produces a Standard Widescreen Video (1920x1080); 9:16 produces a Vertical Short/Reel (1080x1920). Never use 1:1."
     },
     "target_length": {
       "type": "object",
@@ -53,9 +53,9 @@
         "preset": {
           "type": "string",
           "enum": [
-            "short_15_30s",
-            "standard_45_60s",
-            "extended_75_120s",
+            "concise_30s",
+            "standard_60s",
+            "extended_90_120s",
             "custom_seconds",
             "story_driven_auto"
           ],
@@ -71,7 +71,7 @@
           "type": "integer",
           "minimum": 3,
           "maximum": 60,
-          "description": "Planned number of 3-6s visual beats."
+          "description": "Planned number of 3-6s connected visual beats."
         }
       }
     },
@@ -82,7 +82,7 @@
         "full_script"
       ],
       "default": "title_and_context",
-      "description": "Whether the user provided just a Title/Context idea (Agent writes full script & beats) or a Full Script (Agent segments & calibrates beats)."
+      "description": "Whether the user provided Just Title & Context (Agent writes full script & beats) or a Full Script (Agent segments & calibrates beats)."
     },
     "content_payload": {
       "type": "object",
@@ -113,7 +113,7 @@
             "studio_hybrid_ffmpeg_master"
           ],
           "default": "in_app_integrated_tts",
-          "description": "In-app VideoExpress CloneVoice narration + Auto Align, OR Studio Hybrid pipeline with mouth-locked video clips, -14 LUFS voiceover, and -20dB sidechain-ducked BGM."
+          "description": "Route A: In-app VideoExpress CloneVoice narration + Auto Align; Route B: Studio Hybrid pipeline with mouth-locked video clips, -14 LUFS voiceover, and -20dB sidechain-ducked BGM."
         },
         "narrator_voice": {
           "type": "string",
@@ -137,28 +137,6 @@
           "type": "boolean",
           "default": true,
           "description": "Enforce sealed closed-lip smile and non-mouth emotional expression when narration is third-person voiceover."
-        }
-      }
-    },
-    "delivery": {
-      "type": "object",
-      "properties": {
-        "save_project": {
-          "type": "boolean",
-          "default": true
-        },
-        "export_mp4": {
-          "type": "boolean",
-          "default": true
-        },
-        "generate_thumbnail": {
-          "type": "boolean",
-          "default": true
-        },
-        "atomic_dropzone_publish": {
-          "type": "boolean",
-          "default": false,
-          "description": "When enabled, delivers Thumbnail (.jpg) FIRST, Master Video (.mp4) SECOND, and Metadata (.md) LAST to YUploader dropzone."
         }
       }
     }

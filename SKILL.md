@@ -1,16 +1,17 @@
 ---
-name: videoexpress-shorts-agent
+name: videoexpress-agent
 description: >-
-  Autonomous Dynamic Multi-Style Video, Story & Shorts Producer for VideoExpress.ai.
-  Always starts with a structured 6-point interactive intake (Video Type, Visual Style [2D Stickman / 3D Pixar / Photorealistic / 2D Anime / Claymation],
-  Aspect Ratio [16:9 / 9:16], Target Length, Input Mode [Just Title & Context vs Full Script], and Audio Route [In-App CloneVoice TTS vs Studio FFmpeg Master]).
-  Enforces Master Character & Fixed Location references, Outgoing-to-Incoming continuity handoffs, Mouth-Locked non-lipsync prompts,
-  5-slot concurrent queue polling, BunnyCDN mediaPath sync guard, and 0px audio-video assembly.
+  Autonomous Multi-Style Video Producer for VideoExpress.ai. Activate whenever the user says
+  "Create a VideoExpress Video" or "Use VideoExpress Agent". Starts with a structured 6-point interactive intake
+  (Video Type, Aspect Ratio [16:9 Standard Video vs 9:16 Vertical Short], Visual Style [2D Stickman / 3D Pixar / Photorealistic / 2D Anime / Claymation],
+  Target Length, Input Mode [Just Title & Context vs Full Script], and Audio Route [In-App CloneVoice TTS vs Studio FFmpeg Master]).
+  Enforces 5-Layer Continuity (Master Character Reference Photo 1, Fixed Location Reference Photo 2, Outgoing-to-Incoming State Handoffs,
+  Incoming Prop & Eyeline Gates, and Frame QA), Mouth-Locked prompts, 5-slot queue polling, and BunnyCDN mediaPath sync guard.
 ---
 
-# 🎬 VideoExpress Dynamic Multi-Style Story & Shorts Agent
+# 🎬 VideoExpress Agent (`videoexpress-agent`)
 
-Whenever the user asks to create a video, story, or Short in **VideoExpress.ai** (or invokes `videoexpress`, `stickman story`, or `videoexpress-shorts-agent`), follow this modular production workflow.
+Whenever the user asks to **"Create a VideoExpress Video"** or **"Use VideoExpress Agent"** (or requests any story/video production in **VideoExpress.ai**), follow this modular workflow.
 
 ---
 
@@ -18,25 +19,26 @@ Whenever the user asks to create a video, story, or Short in **VideoExpress.ai**
 
 Before generating any assets or spending credits, check what the user has already provided and ask **once** for any missing choices across these **6 intake dimensions** (using `ask_question` or a single concise prompt — see [`prompts/01-intake-and-brief.md`](prompts/01-intake-and-brief.md)):
 
-1. **Video Type / Format:**
+1. **Video Type (Narrative Genre):**
    - `Narrated Story / Fable` *(Default)*
-   - `YouTube Short / Instagram Reel / TikTok` *(3s hook, escalating beats, seamless loop ending)*
-   - `Explainer / Documentary / Educational`
-   - `Comedy / Satire Skit`
-2. **Visual Style (`select-type`):**
+   - `Explainer / Documentary`
+   - `Comedy / Satire`
+   - `Adventure / Action`
+   - `Educational / Lesson`
+2. **Aspect Ratio (Determines Standard Video vs. Short/Reel):**
+   - `Landscape (16:9) — Standard Widescreen Video` *(Default — `1920x1080` video, `3840x2160` 4K thumbnail)*
+   - `Vertical (9:16) — Vertical Short / Reel` *(`1080x1920` vertical canvas, 3s hook & vertical framing)*
+   - *Never offer `1:1`. Enforce the chosen ratio across the project bar, the generation dialog's own ratio toggle before every `Create Image` click, timeline tracks, and final export.*
+3. **Visual Style (`select-type`):**
    - `2D Stickman` *(Classic stickman: white circular head, expressive drawn eyes/eyebrows, 2 thin black arms/hands, 2 thin black legs/shoes; every visible human including background crowds must be a 2D stickman)*
    - `3D Pixar / 3D Animated Feature` *(subsurface scattering, tactile fabric/fur, volumetric rim light)*
    - `Photorealistic / Cinematic` *(natural optical lens physics, realistic textures, zero cartoon artifacts)*
    - `2D Illustration / 2D Anime` *(layered cel shading, painted atmospheric backgrounds)*
    - `Claymation / Stop-Motion` *(handcrafted plasticine textures, miniature studio tabletop lighting)*
-3. **Aspect Ratio (Project-Wide Invariant):**
-   - `Landscape (16:9)` *(Widescreen `1920x1080` video, `3840x2160` 4K thumbnail)*
-   - `Vertical (9:16)` *(Shorts/Reels `1080x1920` video & cover)*
-   - *Never offer `1:1`. Enforce the chosen ratio across the project bar, the generation dialog's own ratio toggle before every `Create Image` click, timeline tracks, and final export.*
 4. **Target Length / Runtime:**
-   - `Short (15s–30s | ~4–6 scenes)`
-   - `Standard (45s–60s | ~9–12 scenes)`
-   - `Extended Story (75s–120s+ | ~15–22 scenes)`
+   - `Concise (~30s | ~6–8 scenes)`
+   - `Standard (~45–60s | ~9–12 scenes)`
+   - `Extended (~75–120s+ | ~15–22 scenes)`
    - `Story-Driven / Auto` *(Default when unspecified — plans enough 3–5s connected beats for a complete story without filler)*
 5. **Script Input Mode:**
    - **Mode A — Just Title & Context / Idea:** User provides a title, topic, or brief premise; autonomously write the full story arc, fresh protagonist identity (do not automatically reuse *Milo*), fixed location layouts, and 3–5s per-scene narration lines.
@@ -47,32 +49,28 @@ Before generating any assets or spending credits, check what the user has alread
 
 ---
 
+## 🔗 5-Layer Continuity System (Enforced on Every Run)
+
+See [`prompts/02-story-and-continuity.md`](prompts/02-story-and-continuity.md) and [`templates/continuity-ledger.template.md`](templates/continuity-ledger.template.md):
+
+1. **Layer 1 — Standalone Master Character (`Reference Photo 1`):**
+   - Generate and inspect one full-body protagonist alone on a plain neutral studio background before Scene 1. Save as `<Project Title> — Master Character`, enable **Consistent Character**, and lock it into `Reference Photo 1` across all scenes (`1..N`).
+2. **Layer 2 — Fixed Location Layouts (`Reference Photo 2`):**
+   - Lock the camera side (`SOUTH`, etc.) and landmark screen zones (`LEFT`, `CENTER`, `RIGHT`, `FOREGROUND`, `BACKGROUND`) for every recurring set. Attach a standalone empty set reference to `Reference Photo 2` when supported.
+3. **Layer 3 — Outgoing State $N$ = Incoming State $N+1$ Handoff Chain:**
+   - Plan the complete Continuity Ledger before Scene 1. Every scene's source image starts in the exact pose, screen position, hand occupancy, and prop state where the prior scene ended—never resetting to a neutral front-facing pose or repeating an approach/reach cycle.
+4. **Layer 4 — Incoming Prop State & Interaction Eyeline Gates:**
+   - Source images depict the **pre-action state** of props (e.g., tightly folded umbrella shaft before opening; wet clothing stays wet across cuts). Interacting characters face each other across a readable side-on or three-quarter axis rather than staring into the lens.
+5. **Layer 5 — Pre-Video Source Inspection & `t=1.5s` Frame Audit:**
+   - Inspect each source image before clicking `Create Video` (1 head, 1 torso, 2 arms/hands, 2 legs/feet, exact prop count, zero style contamination).
+
+---
+
 ## 📂 Modular Reference & Script Hierarchy
 
-Read the corresponding module inside this skill directory when executing each phase:
-
 - **Phase 0 (Intake & Brief):** [`prompts/01-intake-and-brief.md`](prompts/01-intake-and-brief.md) & [`config/intake-schema.json`](config/intake-schema.json)
-- **Phase 1–2 (Story, Multi-Style Art Direction, Master References & Continuity Ledger):** [`prompts/02-story-and-continuity.md`](prompts/02-story-and-continuity.md) & [`config/prompt-book.schema.json`](config/prompt-book.schema.json)
+- **Phase 1–2 (Story, Multi-Style Art Direction & 5-Layer Continuity):** [`prompts/02-story-and-continuity.md`](prompts/02-story-and-continuity.md) & [`config/prompt-book.schema.json`](config/prompt-book.schema.json)
 - **Phase 3–4 (VideoExpress Modal DOM Hooks, 5-Slot Queue & BunnyCDN Guard):** [`prompts/03-videoexpress-mechanics.md`](prompts/03-videoexpress-mechanics.md) & [`scripts/ve_queue_worker.js`](scripts/ve_queue_worker.js)
 - **Phase 5–6 (In-App CloneVoice vs Studio FFmpeg Sidechain Mastering & Atomic Delivery):** [`prompts/04-audio-qa-and-delivery.md`](prompts/04-audio-qa-and-delivery.md) & [`scripts/studio_audio_assembler.py`](scripts/studio_audio_assembler.py)
 - **Templates:** [`templates/production-brief.template.md`](templates/production-brief.template.md) & [`templates/continuity-ledger.template.md`](templates/continuity-ledger.template.md)
 - **QA Checklist & Examples:** [`evals/acceptance-checklist.md`](evals/acceptance-checklist.md) & [`examples/`](examples/)
-
----
-
-## 🔒 Non-Negotiable Production Rules
-
-1. **Standalone Master Character First (`Reference Photo 1`):**
-   - Generate and inspect one full-body protagonist alone on a plain neutral studio background before Scene 1. Save as `<Project Title> — Master Character`, enable **Consistent Character**, and keep it in `Reference Photo 1` across all scenes (`1..N`).
-2. **Fixed Location Layouts (`Reference Photo 2`):**
-   - Lock the camera side and landmark screen zones (`LEFT`, `CENTER`, `RIGHT`, `FOREGROUND`, `BACKGROUND`) for every recurring set. Attach a standalone empty set reference to `Reference Photo 2` when supported.
-3. **Outgoing State $N$ = Incoming State $N+1$:**
-   - Every scene starts in the exact pose, position, and prop state where the prior scene ended. Never reset to a neutral pose or depict a completed action in the source image.
-4. **Pre-Submit Modal Reset Guard:**
-   - Before every `Create Image` click, verify the dialog's own aspect-ratio toggle (`16:9` or `9:16`) and confirm `Automatically enhance my image prompt` is **OFF**.
-5. **Mouth-Lock Protocol (For Third-Person Voiceover / Non-LipSync):**
-   - Establish a single sealed closed-lip smile at frame 0 (`lips, jaw, chin, cheeks remain still`) and route all emotion through eyes, eyebrows, head tilt, posture, and hands.
-6. **5-Slot Queue & BunnyCDN `mediaPath` Sync Latency Guard:**
-   - Respect the 5-concurrent-video limit (`/ai/api/status/<uuid>`) and wait until both `status === 'completed'` / `'SUCCEEDED'` **and** `mediaPath` (`https://cdn-ny-b.videoexpress.ai/video/<fileName>.mp4`) is non-null and `> 1 MB` before downloading or inserting.
-7. **Atomic Dropzone Delivery (When Using YUploader):**
-   - Write **1. Thumbnail (`.jpg`) FIRST** → **2. Master Video (`.mp4`) SECOND** → **3. Metadata (`.md`) LAST**.
