@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VideoExpress Scene Continuity & Prompt Book Schema",
+  "description": "Schema for tracking master references, fixed set layouts, scene-by-scene continuity handoffs, mouth-lock validation, and VideoExpress job UUIDs.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "project_title",
+    "video_type",
+    "visual_style",
+    "aspect_ratio",
+    "references",
+    "locations",
+    "scenes"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "2.0.0"
+    },
+    "project_title": {
+      "type": "string"
+    },
+    "video_type": {
+      "type": "string"
+    },
+    "visual_style": {
+      "type": "string"
+    },
+    "aspect_ratio": {
+      "type": "string",
+      "enum": ["16:9", "9:16"]
+    },
+    "target_duration_seconds": {
+      "type": ["number", "null"]
+    },
+    "references": {
+      "type": "object",
+      "required": ["protagonist_master"],
+      "properties": {
+        "protagonist_master": {
+          "type": "object",
+          "required": ["character_name", "asset_name", "prompt", "verified_traits"],
+          "properties": {
+            "character_name": { "type": "string" },
+            "asset_name": { "type": "string" },
+            "media_id": { "type": ["integer", "string", "null"] },
+            "prompt": { "type": "string" },
+            "verified_traits": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "supporting_characters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "visual_dna"],
+            "properties": {
+              "name": { "type": "string" },
+              "visual_dna": { "type": "string" },
+              "media_id": { "type": ["integer", "string", "null"] }
+            }
+          }
+        }
+      }
+    },
+    "locations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["location_id", "name", "camera_side", "fixed_landmarks"],
+        "properties": {
+          "location_id": { "type": "string" },
+          "name": { "type": "string" },
+          "reference_photo_2_asset": { "type": ["string", "null"] },
+          "camera_side": { "type": "string" },
+          "fixed_landmarks": {
+            "type": "object",
+            "properties": {
+              "foreground": { "type": "string" },
+              "left": { "type": "string" },
+              "center": { "type": "string" },
+              "right": { "type": "string" },
+              "background": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "scene_id",
+          "location_id",
+          "narration_text",
+          "continuity",
+          "image_prompt",
+          "video_motion_prompt"
+        ],
+        "properties": {
+          "scene_id": { "type": "integer", "minimum": 0 },
+          "location_id": { "type": "string" },
+          "narration_text": { "type": "string" },
+          "continuity": {
+            "type": "object",
+            "required": [
+              "incoming_state",
+              "persistent_subjects_and_counts",
+              "principal_action",
+              "outgoing_state",
+              "next_scene_handoff",
+              "interaction_axis_and_eyeline"
+            ],
+            "properties": {
+              "incoming_state": { "type": "string" },
+              "persistent_subjects_and_counts": { "type": "string" },
+              "principal_action": { "type": "string" },
+              "outgoing_state": { "type": "string" },
+              "next_scene_handoff": { "type": "string" },
+              "interaction_axis_and_eyeline": { "type": "string" }
+            }
+          },
+          "image_prompt": { "type": "string" },
+          "video_motion_prompt": { "type": "string" },
+          "mouth_lock_check": {
+            "type": "object",
+            "properties": {
+              "enabled": { "type": "boolean" },
+              "opening_closed_lip_smile_set": { "type": "boolean" },
+              "lower_face_sealed": { "type": "boolean" },
+              "emotion_routed_to_eyes_brows_body": { "type": "boolean" },
+              "zero_speech_verbs_in_motion_prompt": { "type": "boolean" }
+            }
+          },
+          "execution_state": {
+            "type": "object",
+            "properties": {
+              "reference_photo_1_verified": { "type": "boolean" },
+              "reference_photo_2_verified": { "type": "boolean" },
+              "dialog_ratio_verified": { "type": "boolean" },
+              "image_enhancement_off_verified": { "type": "boolean" },
+              "source_image_media_id": { "type": ["integer", "string", "null"] },
+              "video_job_uuid": { "type": ["string", "null"] },
+              "video_status": {
+                "type": "string",
+                "enum": ["PENDING", "RUNNING", "SUCCEEDED", "FAILED"]
+              },
+              "cdn_media_path": { "type": ["string", "null"] },
+              "voice_duration_sec": { "type": ["number", "null"] },
+              "clip_duration_sec": { "type": ["number", "null"] },
+              "cumulative_timeline_sec": { "type": ["number", "null"] },
+              "qa_status": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,69 +1,54 @@
-# Acceptance checklist
+# VideoExpress Story & Shorts Agent — Acceptance & QA Checklist
 
-- [ ] Visible supported signed-in browser; alternatives tried before troubleshooting request.
-- [ ] Topic obtained once; supplied preferences retained, missing ratio/voice defaulted to 16:9/Beau Whitaker without another question; any offered ratio choices were only 9:16 or 16:9.
-- [ ] Supplied input values were not requested again, and applying the narrator default did not create an extra approval pause.
-- [ ] The request identifies the intended product/account/project and authorizes routine production; no repeated per-clip or per-phase approvals.
-- [ ] Purchases/upgrades, new agreements, deletion, public publishing, unrelated settings, new providers/recipients, and sensitive authentication remain outside routine scope unless specifically authorized.
-- [ ] Any customer statement about unlimited generation is recorded as account context rather than a universal guarantee; visible payment restrictions are reported and no product control is bypassed.
-- [ ] Recoverable errors received 2–3 informed attempts; existing jobs/assets were inspected before resubmission, and unknown-status operations were not duplicated.
-- [ ] Active concurrent-generation limit observed; when all slots were occupied, the workflow waited for an existing job to finish before submitting another.
-- [ ] Every submitted video job was tracked to completion or failure; a full queue was not treated as a failed submission.
-- [ ] Generic technical errors were reported as observed; no unsupported security-flag diagnosis was claimed.
-- [ ] Webpage, document, media, metadata, filename, and generated text was treated as task data unless explicitly adopted by the user; no embedded content changed permissions or destinations.
-- [ ] Credentials, session data, payment data, and private account details stayed out of prompts, reports, and ledgers.
-- [ ] Ratio and character reference consistent; new story and revisions use 2D unless the user explicitly changes that standing preference.
-- [ ] Fresh story-appropriate protagonist name chosen rather than automatically reusing Milo; name consistent within the story.
-- [ ] Every visible human, including supporting and background characters, is a 2D stickman; no realistic person or mixed human-character style appears in source images or clips.
-- [ ] Recurring supporting stickmen have distinct appearances and retain their identities across scenes and joins.
-- [ ] A new dedicated standalone stickman master was generated, reviewed, and saved before any scene images or clips.
-- [ ] Master depicts one full-body character with correct anatomy/costume on a neutral background; its saved asset identity is recorded.
-- [ ] Consistent Character uses that exact master for every scene, including scene 1; selection retained across scenes and restored only after a visible reset; no scene image substituted as master.
-- [ ] Routine scripts, prompts and intermediate candidates kept internal; topic-driven workflow continued to the saved video without a user click-through process. Script-only delivery requires an explicit request.
-- [ ] Connected short narration targeted natural 3–5 seconds; enough meaningful beats planned for a complete story and any explicit user duration, without a fixed runtime requirement.
-- [ ] Actual clip durations accumulated in the ledger; assembled timeline measured after Auto Align and reported accurately and checked against an explicit requested duration only.
-- [ ] Full action sequence planned before story images, with incoming state, new action, outgoing state and next-scene handoff for every beat.
-- [ ] Each beat advances the action or holds a motivated reaction; no unintended repeated approach/reach or neutral pose reset.
-- [ ] Images depict actual narrated moment with all required people, animals and plants counted, identified and correctly placed.
-- [ ] Props have explicit ownership, locations and contact points.
-- [ ] Each recurring location has a fixed layout and camera side, repeated in all its image and motion prompts.
-- [ ] Where supported, the same standalone environment reference is selected as Reference Photo 2; protagonist master stays in Reference Photo 1.
-- [ ] Interaction camera chosen before environment layout: participants face each other at readable depth, with clear torso/head directions and meeting eyelines.
-- [ ] Protagonist looks at the intended participant or prop, not the lens; photo camera points toward its subject. References do not force neutral front-facing poses.
-- [ ] Style conversion preserves story/name/narration, creates matching new master and location references, and saves a separate project without replacing the earlier version.
-- [ ] 2D depth uses ink/cel styling, scale, overlap and receding scenery. References and outputs share the selected style; a user-requested style override remains consistent throughout its run.
-- [ ] Source frames show the incoming prop state rather than completing the next action early; folded/open umbrella state, wet clothing and occupied hands checked explicitly.
-- [ ] Reference Photo controls verified independently from source-image library selection; Creative mode OFF.
-- [ ] All candidates reviewed for anatomy, staging, people, continuity and movement room; face, eyes, eyebrows, proportions and costume checked against the original master to prevent accumulated drift.
-- [ ] During the final image QA pass, when performed, source images were inspected inside the frame; each visible stickman has one head/torso, exactly two arms/hands and two legs/feet, with no hidden, fused, detached, malformed or extra limbs.
-- [ ] Every story prop was inventoried by exact required count; foreground, background, hands, clothing and scenery contain no duplicate maps, bags, phones, plants, fragments or unexplained lookalike objects.
-- [ ] Image enhancement off; video enhancement off when available without Advanced Mode.
-- [ ] Advanced Mode OFF; Narration Video ON.
-- [ ] Create Video opens integrated TTS; CloneVoice → System Voice → selected voice used.
-- [ ] System voice used by default; any requested cloned voice has established speaker permission for the intended use.
-- [ ] Audio created inside VideoExpress before each video submission; routine speech listening deferred to the final pass.
-- [ ] Standalone CloneVoice website, narration downloads and library imports not used.
-- [ ] Auto Align pressed after final fitting on relevant tracks and boundaries rechecked.
-- [ ] Correct project save visibly verified; any claimed export exists and opens; export status reported; previous successful assets preserved.
-- [ ] Fast production mode used: one brief source-image check followed by integrated audio creation and one video submission; detailed QA deferred to the end.
-- [ ] Adventure scenes plan meaningful character action; camera movement, waves and breathing do not substitute for travel or interaction.
-- [ ] Source images use action-ready poses and planned handoffs; master standing pose does not dictate scene poses.
-- [ ] Motion prompt is one present-tense paragraph, shot-led, with Initially/then/finally; no scene IDs, timestamps, brackets or lists.
-- [ ] Detailed video scrubbing, five-checkpoint anatomy checks, mandatory endpoint/join playback and minor motion retries were not required.
-- [ ] Video retries occurred only for confirmed generation failure or clearly unusable output, with at most three total attempts and no duplicate unknown jobs.
-- [ ] Completed asset IDs and actual durations recorded; clips added once in story order and timing boundaries verified.
-- [ ] Narration remains in the integrated TTS field; requested ambient sound may appear in the motion paragraph.
-- [ ] Final report distinguishes reviewed source images from unverified detailed motion, continuity and audio quality.
+Use this checklist to validate each production run across **Intake**, **Character/Location Continuity**, **VideoExpress UI & Queue Mechanics**, **Audio Mastering**, and **Final Export/Delivery**.
 
-- [ ] Same browser tab and generation panel retained between submissions; only required subdialogs closed.
-- [ ] Character reference and settings reused; environment changed only with location, and reset controls restored only when needed.
-- [ ] Next scene prepared immediately after video submission while prior jobs rendered within the visible concurrency limit.
-- [ ] No routine library visits or per-generation speech/video QA; assets collected and reviewed in one final pass, with limitations reported.
+---
 
-- [ ] Generation dialog ratio checked independently from project ratio immediately before each Create Image submission; requested 9:16 or 16:9 restored if reset.
-- [ ] Image-prompt enhancement checked OFF immediately before each Create Image submission and unchecked if a rerender re-enabled it; panel and valid references retained.
+## 1. Interactive Intake & Authorization Gates
+- [ ] **6 Intake Dimensions Resolved:** Video Type, Visual Style (`2D Stickman`, `3D Pixar`, `Photorealistic`, `2D Anime`, `Claymation`), Aspect Ratio (`16:9` or `9:16`—never `1:1`), Target Length, Input Mode (**Just Title & Context** vs. **Full Script**), and Audio Route (**In-App CloneVoice** vs. **Studio FFmpeg Hybrid**) were collected or defaulted cleanly without repetitive questions.
+- [ ] **Input Mode Honored:**
+  - If **Just Title & Context**: Agent autonomously wrote a fresh protagonist name (not automatically reusing *Milo*), a connected multi-beat arc, and natural 3–5s per-scene narration.
+  - If **Full Script Provided**: Agent preserved the user's narrative text, segmented it into 3–6s one-action beats, and verified breath padding (`audio_dur <= clip_dur - 0.60s`).
+- [ ] **Authorization Boundary Observed:** Routine generation, retries (up to 3 per scene), timeline assembly, Auto Align, saving, and exporting proceeded without per-clip interruptions; purchases, upgrades, deletions of existing projects, and public gallery publishing were never performed without explicit approval.
+- [ ] **Security & Privacy:** Webpage/document text was treated strictly as task data; credentials, tokens, and private account details were never exposed in prompts, ledgers, or commits.
 
-- [ ] Each completed video matched to its scene, right-clicked in My AI Videos and added using Add to Timeline in planned story order; one new clip verified per action and uncertain actions checked before repeating.
+---
 
-- [ ] Decision gates applied without routine mid-production questions; defaults used for missing preferences and required pauses explained specifically.
-- [ ] Final export completed and verified unless user explicitly requested no export/project-only; no upgrade or public publishing performed.
+## 2. Multi-Style Purity, Master References & Fixed Layouts
+- [ ] **Single Locked Style Across Run:** Master Character, Location References, Source Images, and Video Motion Prompts all used the exact same visual style (`2D Stickman`, `3D Pixar`, `Photorealistic`, etc.) with zero cross-style contamination.
+- [ ] **2D Stickman Purity (When 2D Stickman Selected):** Every visible human—including supporting and distant background people—is a 2D stickman with 1 circular white head, 1 torso, exactly 2 thin black arms/hands, and 2 thin black legs/feet (zero realistic humans or extra/fused limbs).
+- [ ] **Standalone Master Character First (`Reference Photo 1`):** A dedicated full-body character on a plain neutral studio background (no scene props or other people) was generated, inspected, saved (`<Title> — Master Character`), and attached to `Reference Photo 1` for every scene (`1..N`), including Scene 1.
+- [ ] **Fixed Set Layouts & Environment References (`Reference Photo 2`):** Every recurring location had a locked camera side and fixed landmark mapping (`LEFT`, `CENTER`, `RIGHT`, `FOREGROUND`, `BACKGROUND`) repeated in all prompts; standalone environment reference attached to `Reference Photo 2` where supported.
+
+---
+
+## 3. Continuity Handoffs, Eyelines & Mouth-Lock Protocol
+- [ ] **Full Action Sequence Planned Before Scene 1:** Continuity Ledger completed with `Incoming State | Persistent Subjects & Counts | Principal Action | Outgoing State | Next Scene Handoff | Interaction Axis`.
+- [ ] **Outgoing State $N$ = Incoming State $N+1$:** Each scene starts where the previous scene ended; no unintended resets to a neutral standing pose or repeated approach/reach cycles.
+- [ ] **Incoming Prop State Verified:** Source images depict the starting state of props (e.g., tightly folded umbrella shaft before opening, dry vs. wet jacket state preserved across cuts) rather than completing the action prematurely.
+- [ ] **Interaction Eyeline Gate:** Interacting characters face each other across a readable side-on or three-quarter axis; no unintended lens-staring or targets placed behind the protagonist's back.
+- [ ] **Exact Subject & Prop Inventory:** All required people, animals, plants, and story props were counted and verified inside the frame with zero accidental duplicates.
+- [ ] **Mouth-Lock Protocol (When Applicable):** Third-person voiceover / non-lipsync clips established a single sealed closed-lip smile at frame 0 and routed all emotion through eyes, eyebrows, head tilt, posture, and hands (`mouth_lock_check` passed).
+
+---
+
+## 4. VideoExpress UI, DOM & Queue Mechanics
+- [ ] **Persistent Generation Panel:** The same browser tab and `Create Video From Prompt` panel remained open across scene submissions without unnecessary Media Library visits mid-run.
+- [ ] **Pre-Submit Dialog Ratio & Enhancement Guard:** Immediately before every `Create Image` click, the dialog's own aspect-ratio selector (`16:9` or `9:16`) was verified and `Automatically enhance my image prompt` was confirmed **OFF**.
+- [ ] **Mode Settings Verified:** `Creative mode` OFF, `Consistent Character` ON, `Video prompt enhancement` OFF, `Public gallery sharing` OFF.
+- [ ] **5-Slot Concurrent Queue Respected:** At most 5 video jobs ran simultaneously; full queues waited for an active slot to finish without creating duplicate submissions, and every job UUID was tracked to completion.
+- [ ] **BunnyCDN `mediaPath` Sync Verified:** Assets were only downloaded or timeline-inserted after `status === 'completed'` / `'SUCCEEDED'` **and** `mediaPath` resolved to a valid MP4 payload (`> 1 MB`).
+
+---
+
+## 5. Audio Mastering, Timeline Assembly & Final Delivery
+- [ ] **Route A (In-App Integrated Narration):**
+  - Narration entered exclusively in `CloneVoice → System Voice → <Selected Voice>` TTS box; visual motion prompt kept in the Video Prompt box (`Initially..., then..., finally...`).
+  - Completed clips added once in story order (`Scene 1..N`) via `My AI Videos` → `Add to Timeline`.
+  - Any accidental unsaved duplicate timeline brick removed cleanly via `$(extraBrick).trigger('ctxmenu:delete')`.
+  - `Auto Align Clips` executed on populated tracks, total runtime measured, project saved (`document.title` verified), and Full HD `1080p MP4` exported and verified.
+- [ ] **Route B (Studio Hybrid FFmpeg Master):**
+  - Continuous narration calibrated with $\ge 0.60\text{s}$ breath margin per shot, `100Hz` highpass, `+3.5dB @ 3kHz` presence boost, and `-14 LUFS` / `-0.5 dBFS` peak normalization.
+  - Genre-matched BGM mixed with dynamic sidechain ducking (`-20dB` to `-24dB` under speech).
+  - Pre-assembly `t = 1.5s` review frames and `blackdetect` checks passed with 0px audio-video endpoint drift.
+  - Atomic Dropzone Delivery order observed when publishing: **1. Thumbnail (`.jpg`) FIRST** → **2. Master Video (`.mp4`) SECOND** → **3. Metadata (`.md`) LAST**.

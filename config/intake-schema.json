@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VideoExpress Agent Intake Configuration Schema",
+  "description": "Structured intake parameters collected at the start of a new VideoExpress production run before spending credits or generating assets.",
+  "type": "object",
+  "required": [
+    "video_type",
+    "visual_style",
+    "aspect_ratio",
+    "target_length",
+    "input_mode",
+    "content_payload",
+    "audio_pipeline"
+  ],
+  "properties": {
+    "video_type": {
+      "type": "string",
+      "enum": [
+        "narrated_story",
+        "youtube_short_reel",
+        "explainer_documentary",
+        "comedy_satire_skit",
+        "fable_storybook"
+      ],
+      "default": "narrated_story",
+      "description": "Primary narrative format and pacing profile for the video."
+    },
+    "visual_style": {
+      "type": "string",
+      "enum": [
+        "2d_stickman",
+        "3d_pixar",
+        "photorealistic",
+        "2d_illustration_anime",
+        "claymation"
+      ],
+      "default": "2d_stickman",
+      "description": "Locked visual style applied across Master Character, Location References, Image Prompts, and VideoExpress select-type dropdown."
+    },
+    "aspect_ratio": {
+      "type": "string",
+      "enum": [
+        "16:9",
+        "9:16"
+      ],
+      "default": "16:9",
+      "description": "Project-wide aspect ratio invariant (Landscape 16:9 or Vertical 9:16 only; 1:1 is never used)."
+    },
+    "target_length": {
+      "type": "object",
+      "required": ["preset"],
+      "properties": {
+        "preset": {
+          "type": "string",
+          "enum": [
+            "short_15_30s",
+            "standard_45_60s",
+            "extended_75_120s",
+            "custom_seconds",
+            "story_driven_auto"
+          ],
+          "default": "story_driven_auto"
+        },
+        "target_seconds": {
+          "type": "integer",
+          "minimum": 10,
+          "maximum": 300,
+          "description": "Explicit target duration in seconds when preset is custom_seconds or user specifies a runtime."
+        },
+        "estimated_scenes": {
+          "type": "integer",
+          "minimum": 3,
+          "maximum": 60,
+          "description": "Planned number of 3-6s visual beats."
+        }
+      }
+    },
+    "input_mode": {
+      "type": "string",
+      "enum": [
+        "title_and_context",
+        "full_script"
+      ],
+      "default": "title_and_context",
+      "description": "Whether the user provided just a Title/Context idea (Agent writes full script & beats) or a Full Script (Agent segments & calibrates beats)."
+    },
+    "content_payload": {
+      "type": "object",
+      "required": ["title_or_topic"],
+      "properties": {
+        "title_or_topic": {
+          "type": "string",
+          "description": "Working title or central topic of the video."
+        },
+        "context_notes": {
+          "type": "string",
+          "description": "Optional context, tone, protagonist traits, setting, or moral/takeaway when input_mode is title_and_context."
+        },
+        "full_script_text": {
+          "type": "string",
+          "description": "Complete narration or scene-by-scene script when input_mode is full_script."
+        }
+      }
+    },
+    "audio_pipeline": {
+      "type": "object",
+      "required": ["route", "narrator_voice"],
+      "properties": {
+        "route": {
+          "type": "string",
+          "enum": [
+            "in_app_integrated_tts",
+            "studio_hybrid_ffmpeg_master"
+          ],
+          "default": "in_app_integrated_tts",
+          "description": "In-app VideoExpress CloneVoice narration + Auto Align, OR Studio Hybrid pipeline with mouth-locked video clips, -14 LUFS voiceover, and -20dB sidechain-ducked BGM."
+        },
+        "narrator_voice": {
+          "type": "string",
+          "default": "Beau Whitaker",
+          "description": "System voice name (e.g., Beau Whitaker, en-US-ChristopherNeural, Lilly) or authorized cloned voice."
+        },
+        "bgm_genre": {
+          "type": "string",
+          "enum": [
+            "none",
+            "cinematic_orchestral",
+            "upbeat_modern_documentary",
+            "sneaky_pizzicato_mystery",
+            "bouncy_comedy_brass",
+            "driving_synthwave_tech",
+            "warm_acoustic_lullaby"
+          ],
+          "default": "cinematic_orchestral"
+        },
+        "mouth_lock_enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enforce sealed closed-lip smile and non-mouth emotional expression when narration is third-person voiceover."
+        }
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "properties": {
+        "save_project": {
+          "type": "boolean",
+          "default": true
+        },
+        "export_mp4": {
+          "type": "boolean",
+          "default": true
+        },
+        "generate_thumbnail": {
+          "type": "boolean",
+          "default": true
+        },
+        "atomic_dropzone_publish": {
+          "type": "boolean",
+          "default": false,
+          "description": "When enabled, delivers Thumbnail (.jpg) FIRST, Master Video (.mp4) SECOND, and Metadata (.md) LAST to YUploader dropzone."
+        }
+      }
+    }
+  }
+}
